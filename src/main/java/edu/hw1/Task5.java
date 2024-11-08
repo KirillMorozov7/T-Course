@@ -2,14 +2,13 @@ package edu.hw1;
 
 public class Task5 {
 
-    // Проверка, является ли число палиндромом
-    private static boolean isPalindrome(int num) {
-        String str = String.valueOf(num);
+    // Функция для проверки, является ли строка палиндромом
+    public static boolean isPalindrome(String s) {
         int left = 0;
-        int right = str.length() - 1;
+        int right = s.length() - 1;
 
         while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) {
+            if (s.charAt(left) != s.charAt(right)) {
                 return false;
             }
             left++;
@@ -18,43 +17,38 @@ public class Task5 {
         return true;
     }
 
-    // Получение потомка числа
-    private static int descendant(int num) {
-        String str = String.valueOf(num);
-        StringBuilder nextGen = new StringBuilder();
+    // Функция для получения потомка числа в виде строки
+    public static String getDescendant(String number) {
+        StringBuilder descendant = new StringBuilder();
 
-        for (int i = 0; i < str.length() - 1; i++) {
-            int sum = (str.charAt(i) - '0') + (str.charAt(i + 1) - '0');
-            nextGen.append(sum);
+        for (int i = 0; i < number.length() - 1; i++) {
+            int sum = (number.charAt(i) - '0') + (number.charAt(i + 1) - '0');
+            descendant.append(sum);
         }
 
-        return Integer.parseInt(nextGen.toString());
+        return descendant.toString();
     }
 
-    // Основная функция для проверки палиндрома или его потомков
-    public static boolean isPalindromeDescendant(int num) {
-        // Проверка исходного числа
-        if (isPalindrome(num)) {
+    // Основная функция для проверки числа
+    public static boolean isSpecialPalindrome(String number) {
+        // Проверяем, является ли само число палиндромом
+        if (isPalindrome(number)) {
             return true;
         }
 
-        // Проверяем потомков
-        while (num >= 10) { // длина должна быть больше 1
-            num = descendant(num);
-            if (isPalindrome(num)) {
+        // Получаем потомка
+        String descendant = getDescendant(number);
+
+        // Проверяем каждый потомок
+        while (descendant.length() > 1) {
+            if (isPalindrome(descendant)) {
                 return true;
             }
+            descendant = getDescendant(descendant);
         }
 
-        return false; // ни одно число не является палиндромом
+        return false; // Если не найден ни один палиндром
     }
 
-    // Пример тестирования
-    public static void main(String[] args) {
-        System.out.println(isPalindromeDescendant(11211230)); // -> true
-        System.out.println(isPalindromeDescendant(13001120)); // -> true
-        System.out.println(isPalindromeDescendant(23336014)); // -> true
-        System.out.println(isPalindromeDescendant(11));        // -> true
-        System.out.println(isPalindromeDescendant(123456));    // -> false
     }
 }
